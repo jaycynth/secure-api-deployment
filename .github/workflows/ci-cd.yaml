@@ -51,11 +51,13 @@ jobs:
         run: |
           flake8 app.py
 
-      - name: Lint and validate Kubernetes manifests
+      - name: Download and run Kubeval
         run: |
-          curl -sSL https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64 -o kubeval
+          curl -LO https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64
+          mv kubeval-linux-amd64 kubeval
           chmod +x kubeval
           ./kubeval k8s/*.yaml
+
 
   docker:
     runs-on: ubuntu-latest
