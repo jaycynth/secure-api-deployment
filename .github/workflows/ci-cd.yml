@@ -61,7 +61,8 @@ jobs:
 
       - name: Validate Kubernetes Manifests
         uses: instrumenta/kubeval-action@master
-        files: k8s/*.yaml
+        with:
+          files: k8s/*.yaml
             
 
   docker:
