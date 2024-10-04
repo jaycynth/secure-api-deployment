@@ -37,7 +37,7 @@ The Kubernetes manifests is composed of:
 - The service is of type NodePort which will expose the Flask app externally, allowing access from outside the cluster
 
 
-# Deploy the Application
+## Deploy the Application
 To deploy the Flask app using the Kubernetes manifests:
 - make k8s-deploy
 
@@ -57,6 +57,8 @@ Forward the service port to access the application and visit http://localhost:80
 
 ![screenshot](screenshots/service-running-2.png)
 
+
+# 2: Setup CI/CD
 
 
 
