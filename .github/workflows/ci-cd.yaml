@@ -23,11 +23,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt  # Install your app dependencies
+          pip install -r requirements.txt  
 
       - name: Run tests
         run: |
-          pytest tests  # Run the tests in the tests directory
+          pytest tests
 
   build:
     runs-on: ubuntu-latest
@@ -44,18 +44,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install flake8  # Install linter
-          pip install -r requirements.txt  # Install your app dependencies
+          pip install flake8
+          pip install -r requirements.txt
 
       - name: Lint code
         run: |
-          flake8 app.py  # Lint your application code
+          flake8 app.py
 
       - name: Lint and validate Kubernetes manifests
         run: |
           curl -sSL https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64 -o kubeval
           chmod +x kubeval
-          ./kubeval k8s/*.yaml  # Validate your Kubernetes manifests
+          ./kubeval k8s/*.yaml
 
   docker:
     runs-on: ubuntu-latest

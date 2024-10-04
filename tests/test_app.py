@@ -1,5 +1,5 @@
 import pytest
-from flask import Flask
+
 from app import app  
 
 @pytest.fixture
@@ -14,6 +14,6 @@ def test_homepage(client):
     assert response.status_code == 200
 
 def test_how_are_you(client):
-    response = client.get('/how-are-you')
+    response = client.get('/how are you')
     assert response.data == b'I am good, how about you?'
     assert response.status_code == 200
