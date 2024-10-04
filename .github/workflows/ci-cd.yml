@@ -106,6 +106,10 @@ jobs:
         run: |
           cat $KUBECONFIG
 
+      - name: Get cluster nodes
+        run: |
+          kubectl get nodes
+
       - name: Set Kubernetes context manually
         run: |
           kind get kubeconfig --name="kind" > kubeconfig.yaml
