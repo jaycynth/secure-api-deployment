@@ -92,11 +92,14 @@ jobs:
 
       - name: Create Kubernetes Cluster
         run: kind create cluster
+ 
+      - name: Check Kubernetes cluster status
+        run: |
+          kubectl cluster-info
 
       - name: Set up Kubernetes context
         run: |
-          kind get kubeconfig > kubeconfig.yaml
-          export KUBECONFIG=kubeconfig.yaml
+          export KUBECONFIG="$(kind get kubeconfig --name="kind")"
 
 
 
