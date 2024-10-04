@@ -96,6 +96,7 @@ jobs:
       - name: Check Kubernetes cluster status
         run: |
           kubectl cluster-info
+        continue-on-error: false
 
       - name: Set up Kubernetes context
         run: |
