@@ -15,7 +15,7 @@ jobs:
 
     services:
       flask-app:
-        image: jaycynth/flask-app:latest
+        image: jaycynth/flask-app:v0.1
         ports:
           - 8080:8080
         options: >-
