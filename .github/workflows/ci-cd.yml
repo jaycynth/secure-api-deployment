@@ -93,6 +93,12 @@ jobs:
       - name: Create Kubernetes Cluster
         run: kind create cluster
 
+      - name: Set up Kubernetes context
+        run: |
+          kind get kubeconfig > kubeconfig.yaml
+          export KUBECONFIG=kubeconfig.yaml
+
+
 
   deploy:
     runs-on: ubuntu-latest
@@ -105,11 +111,6 @@ jobs:
         uses: azure/setup-kubectl@v1
         with:
           version: 'latest'
-
-      - name: Set up Kubernetes context
-        run: |
-          echo "$(kind get kubeconfig-path --name="kind")" > kubeconfig.yaml
-          export KUBECONFIG=kubeconfig.yaml
 
 
       - name: Deploy to Kubernetes

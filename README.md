@@ -4,7 +4,7 @@ This project is a simple Flask API that includes two endpoints:
 - **GET /**: Returns `"Welcome!"`.
 - **GET /how are you**: Returns `"I am good, how about you?"`.
 
-The application is containerized using Docker and deployed to a Kubernetes cluster managed by `kind`. The deployment is automated using a CI/CD pipeline configured with GitHub Actions. Security measures such as image vulnerability scanning, resource limits, Kubernetes secrets, and network policies are also implemented to ensure the robustness of the system.
+The application is containerized using Docker and deployed to a Kubernetes cluster managed by `kind`. The deployment is automated using a CI/CD pipeline configured with GitHub Actions. Security measures such as image vulnerability scanning, resource limits and Kubernetes secrets implemented to ensure the robustness of the system.
 
 ## Makefile
 This is a file that contains all the commands necessary to run the application
@@ -60,6 +60,29 @@ Forward the service port to access the application and visit http://localhost:80
 
 # 2: Setup CI/CD
 
+## Workflow Triggers
+The workflow is triggered on two events:
+- Whenever code is pushed to the main branch.
+- Whenever a pull request is created targeting the main branch.
+
+## Jobs
+The workflow consists of five main jobs: test, build, docker, create-cluster, and deploy.
+
+### 1. Test Job
+- This job is responsible for validating the code and running tests.
+
+### 2. Build Job
+- This job builds the application and performs linting and manifest validation.
+    - Runs flake8 on app.py to check for code style issues.
+    - Uses the instrumenta/kubeval-action@master to validate Kubernetes manifest files in the k8s directory.
+### 3. Docker Job
+ This job builds and pushes the Docker image to Docker Hub and depends on the build job.
+
+### 4. Create Cluster Job
+- This job sets up a local Kubernetes cluster using kind.
+
+### 5. Deploy Job
+- This job deploys the application to the Kubernetes cluster created in the previous job.
 
 
 
