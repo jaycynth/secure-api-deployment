@@ -1,4 +1,4 @@
-## Project Summary
+# Project Summary
 
 This project is a simple Flask API that includes two endpoints:
 - **GET /**: Returns `"Welcome!"`.
@@ -10,17 +10,17 @@ The application is containerized using Docker and deployed to a Kubernetes clust
 This is a file that contains all the commands necessary to run the application
 
 
-## 1: Deploy to K8s
+# 1: Deploy to K8s
 The Flask app is containerized using Docker. The Dockerfile defines the process of packaging the app, installing dependencies, and running the app inside a container.
 
 To build and run the docker image locally:
-  make build TAG=v0.1
-  make run
+  - make build TAG=v0.1
+  - make run
 
-# Kubernetes Setup 
+### Kubernetes Setup 
 
 Using `kind` to create a local Kubernetes cluster for testing and deploying the Flask app.(kind to be installed and added to path in environment variables)
-    make k8s-setup
+    - make k8s-setup
 
 The Kubernetes manifests is composed of:
 - **Deployment**
@@ -38,19 +38,18 @@ The service is configured to listen on port 8080 within the Kubernetes cluster a
 The service is of type NodePort which will expose the Flask app externally, allowing access from outside the cluster
 
 
-
 # Deploy the Application
 To deploy the Flask app using the Kubernetes manifests:
-    make k8s-deploy
+    - make k8s-deploy
 
 Check if pods are up and running:
-    make k8s-get-nodes
+    - make k8s-get-nodes
 
-Check if services
-    make k8s-get-services
+Check if services:
+    - make k8s-get-services
 
-Forward the service port to access the application and visit http://localhost:8080.
-    make k8s-access
+Forward the service port to access the application and visit http://localhost:8080:
+    - make k8s-access
 
 
 ![screenshot](k8s-access-command.png)
