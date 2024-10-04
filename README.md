@@ -24,15 +24,14 @@ Kind is installed and added to path in environment variables.
   - make k8s-setup
 
 The Kubernetes manifests is composed of:
-- **Deployment**: 
+**Deployment**: 
 - The deployment is configured to run two replicas (pods) of the Flask app at all times, ensuring redundancy and enabling scaling. It targets pods labeled flask-app to manage traffic to the correct pods.
 - The pod template specifies the following configuration:
-1. Container: A container named flask-app uses the image jaycynth/flask-app:v0.1 and listens on port 8080.
-2. Resource Requests and Limits:
-The container requests 128Mi of memory and 250m (0.25 CPU) to guarantee it has the necessary resources and the container is restricted to a maximum of 256Mi of memory and 500m (0.5 CPU) to prevent overconsumption of cluster resources.
+ 1. Container: A container named flask-app uses the image jaycynth/flask-app:v0.1 and listens on port 8080.
+ 2. Resource Requests and Limits: The container requests 128Mi of memory and 250m (0.25 CPU) to guarantee it has the necessary resources and the container is restricted to a maximum of 256Mi of memory and 500m (0.5 CPU) to prevent overconsumption of cluster resources.
 
 
-- **Service**: 
+**Service**: 
 - The Flask app runs inside the pods on port 8080. 
 - The service is configured to listen on port 8080 within the Kubernetes cluster and routes traffic to all pods labeled flask-app, as defined in the Deployment manifest. 
 - The service is of type NodePort which will expose the Flask app externally, allowing access from outside the cluster
