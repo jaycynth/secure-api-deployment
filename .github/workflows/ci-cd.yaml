@@ -51,8 +51,7 @@ jobs:
         run: |
           flake8 app.py
 
-
-   kubeval:
+  kubeval:
     runs-on: ubuntu-latest
     needs: build
     steps:
