@@ -5,16 +5,19 @@ This project is a simple Flask API that includes two endpoints:
 - **GET /how are you**: Returns `"I am good, how about you?"`.
 
 The application is containerized using Docker and deployed to a Kubernetes cluster managed by `kind`. The deployment is automated using a CI/CD pipeline configured with GitHub Actions.
-The security measures implemented are image vulnerability scanning, resource limits and Kubernetes secrets.
+The security measures implemented are image vulnerability scanning and resource limits.
 
 ## Makefile
 This is a file that contains all the commands necessary to run the application
 
 
 # 1: Deploy to K8s
-The Flask app is containerized using Docker. The Dockerfile defines the process of packaging the app, installing dependencies, and running the app inside a container.
+The Flask app is containerized using Docker. 
 
-To build, tag and push the docker image:
+## Dockerize Application 
+- Specified a Dockerfile to package the application and run it in a local Python WSGI HTTP server using Gunicorn
+
+- To build, tag and push the docker image:
   - make build_service TAG=v0.1
   
 
@@ -70,16 +73,23 @@ The workflow is triggered on two events:
 The workflow consists of four main jobs: test, build, docker and deploy.
 
 ### 1. Test Job
-- This job is responsible for running tests.
+- This job is responsible for running tests setup in the tests folder using pytest
 
 ### 2. Build Job
-- This job builds the application and performs linting and manifest validation and depends on the test job
+- Depends on the test job
+- This job builds the application and performs linting and manifest validation.
     - Runs flake8 on app.py to check for code style issues.
     - Uses the instrumenta/kubeval-action@master to validate Kubernetes manifest files in the k8s directory.
+
 ### 3. Docker Job
-- This job builds and pushes the Docker image to Docker Hub and depends on the build job.
+- Depends on the build job
+- This job builds the flask image (jaycynth/flask-app:v0.1)
+- Scans Docker Image for Vulnerabilities by running Trivy as a Docker container to scan the built image (jaycynth/flask-app:v0.1).
+  If vulnerabilities are found at or above the specified severity levels (HIGH and CRITICAL), the command will exit with a non-zero status, which will fail the job.
+- Pushes the Docker image to Docker Hub.(Used GitHub Secrets to store docker hub registry credentials)
 
 ### 4. Deploy Job
+- Depends on the Docker job
 - Downloads and installs Kind, which will allows to create a local Kubernetes cluster.
 - Creates a new Kubernetes cluster using Kind.
 - Check Kubernetes Cluster Status by running kubectl cluster-info dump to get information about the cluster status.
