@@ -91,16 +91,17 @@ jobs:
       - name: Create Kubernetes Cluster
         run: kind create cluster
 
+      - name: Set KUBECONFIG
+        run: |
+          echo "KUBECONFIG=$(pwd)/kubeconfig.yaml" >> $GITHUB_ENV
+          kind get kubeconfig --name="kind" > kubeconfig.yaml
+          kubectl config get-contexts
+
       - name: Wait for Kubernetes cluster to be ready
         run: |
-          # Wait until the Kubernetes cluster is ready
-          for i in {1..30}; do kubectl get nodes && break || sleep 10; done
-
-      - name: Set Kubernetes context and configure kubeconfig
-        run: |
-          kind get kubeconfig --name="kind" > kubeconfig.yaml
-          export KUBECONFIG=$(pwd)/kubeconfig.yaml
-          kubectl config get-contexts
+          for i in {1..30}; do
+            kubectl get nodes && break || sleep 10
+          done
 
       - name: Check Kubernetes cluster status
         run: kubectl cluster-info dump
@@ -112,14 +113,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set Kubernetes context from previous job
+      - name: Load KUBECONFIG from previous job
         run: |
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
+          echo "KUBECONFIG=$(pwd)/kubeconfig.yaml" >> $GITHUB_ENV
 
       - name: Wait for Kubernetes API to be available
         run: |
-          # Ensure Kubernetes API server is accessible
-          for i in {1..30}; do kubectl version && break || sleep 10; done
+          for i in {1..30}; do
+            kubectl version && break || sleep 10
+          done
 
       - name: Deploy to Kubernetes
         run: |
