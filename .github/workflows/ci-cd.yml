@@ -95,7 +95,6 @@ jobs:
         run: |
           kind get kubeconfig --name="kind" > kubeconfig.yaml
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
-          # List all contexts to confirm the correct one
           kubectl config get-contexts
 
       - name: Check Kubernetes cluster status
@@ -108,10 +107,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set Kubernetes context from previous job
+      - name: Use existing Kubernetes context (no explicit switching needed)
         run: |
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
-          kubectl config use-context kind
 
       - name: Deploy to Kubernetes
         run: |
