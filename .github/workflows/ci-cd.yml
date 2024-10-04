@@ -117,6 +117,8 @@ jobs:
         run: |
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
           echo "KUBECONFIG=$(pwd)/kubeconfig.yaml" >> $GITHUB_ENV
+          kubectl config get-contexts
+
 
       - name: Wait for Kubernetes API to be available
         run: |
