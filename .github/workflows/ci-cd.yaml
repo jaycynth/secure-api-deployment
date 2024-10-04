@@ -51,17 +51,23 @@ jobs:
         run: |
           flake8 app.py
 
-      - name: Download and run Kubeval
-        run: |
-          curl -LO https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64
-          mv kubeval-linux-amd64 kubeval
-          chmod +x kubeval
-          ./kubeval k8s/*.yaml
 
+   kubeval:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Validate Kubernetes Manifests
+        uses: instrumenta/kubeval-action@v1
+        with:
+          manifests: |
+            k8s/*.yaml
 
   docker:
     runs-on: ubuntu-latest
-    needs: build  
+    needs: kubeval  
 
     steps:
       - name: Checkout code
