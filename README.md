@@ -48,7 +48,7 @@ To deploy the Flask app using the Kubernetes manifests:
 Check if pods are up and running:
 - make k8s-get-nodes
 
-Check if services:
+Check if service is up and running:
 - make k8s-get-services
 
 Forward the service port to access the application and visit http://localhost:8080:
