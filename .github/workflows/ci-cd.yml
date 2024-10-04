@@ -95,14 +95,22 @@ jobs:
  
       - name: Check Kubernetes cluster status
         run: |
-          kubectl cluster-info
+          kubectl cluster-info dump
         continue-on-error: false
 
-      - name: Set up Kubernetes context
+      - name: Show current kubectl context
         run: |
-          export KUBECONFIG="$(kind get kubeconfig --name="kind")"
+          kubectl config current-context
 
+      - name: Display kubeconfig file
+        run: |
+          cat $KUBECONFIG
 
+      - name: Set Kubernetes context manually
+        run: |
+          kind get kubeconfig --name="kind" > kubeconfig.yaml
+          export KUBECONFIG=$(pwd)/kubeconfig.yaml
+          kubectl config use-context kind-kind
 
   deploy:
     runs-on: ubuntu-latest
