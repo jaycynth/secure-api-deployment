@@ -91,6 +91,11 @@ jobs:
       - name: Create Kubernetes Cluster
         run: kind create cluster
 
+      - name: Wait for Kubernetes cluster to be ready
+        run: |
+          # Wait until the Kubernetes cluster is ready
+          for i in {1..30}; do kubectl get nodes && break || sleep 10; done
+
       - name: Set Kubernetes context and configure kubeconfig
         run: |
           kind get kubeconfig --name="kind" > kubeconfig.yaml
@@ -107,9 +112,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Use existing Kubernetes context (no explicit switching needed)
+      - name: Set Kubernetes context from previous job
         run: |
           export KUBECONFIG=$(pwd)/kubeconfig.yaml
+
+      - name: Wait for Kubernetes API to be available
+        run: |
+          # Ensure Kubernetes API server is accessible
+          for i in {1..30}; do kubectl version && break || sleep 10; done
 
       - name: Deploy to Kubernetes
         run: |
